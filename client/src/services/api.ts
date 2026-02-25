@@ -1,6 +1,13 @@
 /// <reference types="vite/client" />
-export const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const envUrl = import.meta.env.VITE_API_BASE_URL;
+// In production, we should NOT fallback to localhost as it won't work on mobile.
+export const BASE_URL = envUrl && envUrl !== "" ? envUrl : (import.meta.env.DEV ? 'http://localhost:5000' : '');
 const API_URL = `${BASE_URL}/api`;
+
+console.log('--- API CONFIGURATION ---');
+console.log('Mode:', import.meta.env.MODE);
+console.log('Base URL:', BASE_URL || 'MISSING (Check VITE_API_BASE_URL)');
+console.log('-------------------------');
 
 const getHeaders = () => {
     const token = localStorage.getItem('token');
