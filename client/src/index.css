@@ -17,11 +17,6 @@ body {
   color: var(--tg-theme-text-color, #000000);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: url('./assets/background.jfif');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 
 .text-golden {
