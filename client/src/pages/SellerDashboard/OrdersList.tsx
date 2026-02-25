@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingBag, ChevronRight, Phone, MapPin, User, Clock } from 'lucide-react';
+import { Phone, MapPin, User, Clock } from 'lucide-react';
 import { api } from '../../services/api';
 
 const OrdersList: React.FC = () => {
