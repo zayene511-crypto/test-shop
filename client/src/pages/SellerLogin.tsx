@@ -25,8 +25,9 @@ const SellerLogin: React.FC = () => {
             } else {
                 setError(res.message || 'Login failed');
             }
-        } catch (err) {
-            setError('An error occurred. Please check your connection.');
+        } catch (err: any) {
+            console.error('Login error:', err);
+            setError(err.message || 'An error occurred. Please check your connection.');
         } finally {
             setLoading(false);
         }

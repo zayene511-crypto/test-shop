@@ -17,17 +17,32 @@ const getHeaders = () => {
     };
 };
 
+const handleResponse = async (res: Response) => {
+    const contentType = res.headers.get('content-type');
+    if (!res.ok) {
+        const errorData = contentType?.includes('application/json') ? await res.json() : null;
+        throw new Error(errorData?.message || `Server error: ${res.status}`);
+    }
+    if (!contentType?.includes('application/json')) {
+        console.error('Expected JSON but received:', contentType);
+        const text = await res.text();
+        console.log('Response snippet:', text.substring(0, 100));
+        throw new Error('Invalid server response (not JSON). Check your VITE_API_BASE_URL.');
+    }
+    return res.json();
+};
+
 export const api = {
     // Products
     getProducts: async (search?: string) => {
         const params = new URLSearchParams();
         if (search) params.append('search', search);
         const res = await fetch(`${API_URL}/products?${params.toString()}`);
-        return res.json();
+        return handleResponse(res);
     },
     getProductById: async (id: number) => {
         const res = await fetch(`${API_URL}/products/${id}`);
-        return res.json();
+        return handleResponse(res);
     },
 
     // Orders
@@ -37,7 +52,7 @@ export const api = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderData),
         });
-        return res.json();
+        return handleResponse(res);
     },
 
     // Auth
@@ -47,17 +62,17 @@ export const api = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials),
         });
-        return res.json();
+        return handleResponse(res);
     },
 
     // Seller Dashboard
     getSellerStats: async () => {
         const res = await fetch(`${API_URL}/seller/stats`, { headers: getHeaders() });
-        return res.json();
+        return handleResponse(res);
     },
     getSellerOrders: async () => {
         const res = await fetch(`${API_URL}/orders/seller`, { headers: getHeaders() });
-        return res.json();
+        return handleResponse(res);
     },
     updateOrderStatus: async (id: number, status: string) => {
         const res = await fetch(`${API_URL}/orders/${id}/status`, {
@@ -65,7 +80,7 @@ export const api = {
             headers: getHeaders(),
             body: JSON.stringify({ status }),
         });
-        return res.json();
+        return handleResponse(res);
     },
 
     // Seller Product Management
@@ -75,7 +90,7 @@ export const api = {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: formData,
         });
-        return res.json();
+        return handleResponse(res);
     },
     updateProduct: async (id: number, formData: FormData) => {
         const res = await fetch(`${API_URL}/products/${id}`, {
@@ -83,13 +98,13 @@ export const api = {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: formData,
         });
-        return res.json();
+        return handleResponse(res);
     },
     deleteProduct: async (id: number) => {
         const res = await fetch(`${API_URL}/products/${id}`, {
             method: 'DELETE',
             headers: getHeaders(),
         });
-        return res.json();
+        return handleResponse(res);
     }
 };
