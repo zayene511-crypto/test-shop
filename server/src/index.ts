@@ -9,7 +9,7 @@ import initDb from './config/initDb';
 dotenv.config();
 
 // Initialize Database
-initDb();
+await initDb();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

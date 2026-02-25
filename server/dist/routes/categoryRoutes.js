@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const categoryController_1 = require("../controllers/categoryController");
+const auth_1 = require("../middlewares/auth");
+const multer_1 = require("../config/multer");
+const router = (0, express_1.Router)();
+router.get('/', categoryController_1.getCategories);
+router.post('/', auth_1.authenticateJWT, (0, auth_1.authorizeRole)(['admin']), multer_1.upload.single('image'), categoryController_1.createCategory);
+exports.default = router;
