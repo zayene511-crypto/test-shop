@@ -65,7 +65,7 @@ const ProductModal: React.FC<ProductModalProps> = ({ product, onClose, onSuccess
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
+                <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[80dvh] overflow-y-auto">
                     <div className="space-y-1">
                         <label className="text-xs font-bold text-gray-500 uppercase">Product Name</label>
                         <input

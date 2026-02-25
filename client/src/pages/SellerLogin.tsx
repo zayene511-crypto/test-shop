@@ -33,7 +33,7 @@ const SellerLogin: React.FC = () => {
     };
 
     return (
-        <div className="min-h-[80vh] flex flex-col justify-center">
+        <div className="min-h-[80dvh] flex flex-col justify-center">
             <div className="relative text-center space-y-2 mb-8">
                 <button
                     onClick={() => navigate('/')}
