@@ -17,9 +17,10 @@ const getHeaders = () => {
     };
 };
 
-const handleResponse = async (res: Response) => {
+const handleResponse = async (res: Response, url: string) => {
     const contentType = res.headers.get('content-type');
     if (!res.ok) {
+        console.error(`Request to ${url} failed with status ${res.status}`);
         const errorData = contentType?.includes('application/json') ? await res.json() : null;
         throw new Error(errorData?.message || `Server error: ${res.status}`);
     }
@@ -37,74 +38,84 @@ export const api = {
     getProducts: async (search?: string) => {
         const params = new URLSearchParams();
         if (search) params.append('search', search);
-        const res = await fetch(`${API_URL}/products?${params.toString()}`);
-        return handleResponse(res);
+        const url = `${API_URL}/products?${params.toString()}`;
+        const res = await fetch(url);
+        return handleResponse(res, url);
     },
     getProductById: async (id: number) => {
-        const res = await fetch(`${API_URL}/products/${id}`);
-        return handleResponse(res);
+        const url = `${API_URL}/products/${id}`;
+        const res = await fetch(url);
+        return handleResponse(res, url);
     },
 
     // Orders
     placeOrder: async (orderData: any) => {
-        const res = await fetch(`${API_URL}/orders`, {
+        const url = `${API_URL}/orders`;
+        const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(orderData),
         });
-        return handleResponse(res);
+        return handleResponse(res, url);
     },
 
     // Auth
     login: async (credentials: any) => {
-        const res = await fetch(`${API_URL}/auth/login`, {
+        const url = `${API_URL}/auth/login`;
+        const res = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials),
         });
-        return handleResponse(res);
+        return handleResponse(res, url);
     },
 
     // Seller Dashboard
     getSellerStats: async () => {
-        const res = await fetch(`${API_URL}/seller/stats`, { headers: getHeaders() });
-        return handleResponse(res);
+        const url = `${API_URL}/seller/stats`;
+        const res = await fetch(url, { headers: getHeaders() });
+        return handleResponse(res, url);
     },
     getSellerOrders: async () => {
-        const res = await fetch(`${API_URL}/orders/seller`, { headers: getHeaders() });
-        return handleResponse(res);
+        const url = `${API_URL}/orders/seller`;
+        const res = await fetch(url, { headers: getHeaders() });
+        return handleResponse(res, url);
     },
     updateOrderStatus: async (id: number, status: string) => {
-        const res = await fetch(`${API_URL}/orders/${id}/status`, {
+        const url = `${API_URL}/orders/${id}/status`;
+        const res = await fetch(url, {
             method: 'PUT',
             headers: getHeaders(),
             body: JSON.stringify({ status }),
         });
-        return handleResponse(res);
+        return handleResponse(res, url);
     },
 
     // Seller Product Management
     createProduct: async (formData: FormData) => {
-        const res = await fetch(`${API_URL}/products`, {
+        const url = `${API_URL}/products`;
+        const res = await fetch(url, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: formData,
         });
-        return handleResponse(res);
+        return handleResponse(res, url);
     },
     updateProduct: async (id: number, formData: FormData) => {
-        const res = await fetch(`${API_URL}/products/${id}`, {
+        const url = `${API_URL}/products/${id}`;
+        const res = await fetch(url, {
             method: 'PUT',
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
             body: formData,
         });
-        return handleResponse(res);
+        return handleResponse(res, url);
     },
     deleteProduct: async (id: number) => {
-        const res = await fetch(`${API_URL}/products/${id}`, {
+        const url = `${API_URL}/products/${id}`;
+        const res = await fetch(url, {
             method: 'DELETE',
             headers: getHeaders(),
         });
-        return handleResponse(res);
+        return handleResponse(res, url);
     }
 };
