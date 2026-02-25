@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-image: url('./assets/background.jfif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.text-golden {
+  color: #FFD700 !important;
+}
+
+.mobile-card {
+  @apply bg-white rounded-xl shadow-sm overflow-hidden;
+}
+
+.btn-primary {
+  @apply bg-primary text-white py-2 px-4 rounded-lg font-medium active:scale-95 transition-transform;
+}
+
+@layer components {
+  .nav-item {
+    @apply flex flex-col items-center justify-center text-gray-500 text-xs gap-1;
+  }
+
+  .nav-item.active {
+    @apply text-primary font-semibold;
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    transform: translate(-50%, -100%);
+    opacity: 0;
+  }
+
+  70% {
+    transform: translate(-50%, 10%);
+  }
+
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.3s ease-out forwards;
+}
