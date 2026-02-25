@@ -4,6 +4,11 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 import initDb from './config/initDb';
+import authRoutes from './routes/authRoutes';
+import productRoutes from './routes/productRoutes';
+import categoryRoutes from './routes/categoryRoutes';
+import orderRoutes from './routes/orderRoutes';
+import statsRoutes from './routes/statsRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -18,7 +23,13 @@ const startServer = async () => {
     // Middleware
     app.use(cors());
     app.use(express.json());
-    app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+
+    // Use path.resolve or path.join for uploads
+    const uploadsPath = path.join(__dirname, '../uploads');
+    if (!require('fs').existsSync(uploadsPath)) {
+        require('fs').mkdirSync(uploadsPath, { recursive: true });
+    }
+    app.use('/uploads', express.static(uploadsPath));
 
     // Basic route
     app.get('/', (req, res) => {
